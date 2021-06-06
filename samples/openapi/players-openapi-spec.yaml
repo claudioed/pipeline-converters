@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+    title: Bets - Matches API
+    version: 2.0.0
+paths:
+    '/api/matches/{id}':
+        summary: Handles match for Bets Application.
+        description: Here you can find match details and work with match data
+        get:
+            tags:
+                - matches
+            parameters:
+                -
+                    name: id
+                    description: Match ID
+                    schema:
+                        format: string
+                        type: string
+                    in: path
+                    required: true
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/matches-data'
+                            examples:
+                                data:
+                                    value:
+                                        homeTeam: Barcelona
+                                        awayTeam: Real Madrid
+                                        championship: UEFA Champions League
+                    description: 200 response
+                '404':
+                    content:
+                        application/json:
+                            examples:
+                                error:
+                                    value:
+                                        code: 404
+                                        message: not found
+                    description: 404 response
+            operationId: get-match-by-id
+            summary: Get Match Details
+    /api/matches:
+        get:
+            tags:
+                - matches
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/matches'
+                            examples:
+                                all-matches:
+                                    value:
+                                        -
+                                            homeTeam: some text
+                                            awayTeam: some text
+                                            championship: some text
+                                        -
+                                            homeTeam: some text
+                                            awayTeam: some text
+                                            championship: some text
+                    description: When matche was found
+            operationId: get-all-matches
+            summary: All Matches
+components:
+    schemas:
+        matches-data:
+            title: Match
+            description: Match that someone created
+            type: object
+            properties:
+                homeTeam:
+                    type: string
+                awayTeam:
+                    type: string
+                championship:
+                    type: string
+            example:
+                homeTeam: Barcelona
+                awayTeam: Real Madrid
+                championship: UEFA Champions League
+        matches:
+            title: Root Type for matches
+            description: ''
+            type: array
+            items:
+                type: object
+                properties:
+                    homeTeam:
+                        type: string
+                    awayTeam:
+                        type: string
+                    championship:
+                        type: string
+            example:
+                -
+                    homeTeam: Barcelona
+                    awayTeam: Real Madrid
+                    championship: UEFA Champions League
