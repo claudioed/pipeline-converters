@@ -16,36 +16,71 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
+	"io/ioutil"
+	"log"
+	"pipeline-converters/cmd/backstage"
 )
 
 // openapi2backstageCmd represents the openapi2backstage command
-var openapi2backstageCmd = &cobra.Command{
-	Use:   "openapi2backstage",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+var (
+	openapi2backstageCmd = &cobra.Command{
+		Use:   "openapi2backstage",
+		Short: "A brief description of your command",
+		Long: `A longer description that spans multiple lines and likely contains examples
+			and usage of using your command. For example:
+			
+			Cobra is a CLI library for Go that empowers applications.
+			This application is a tool to generate the needed files
+			to quickly create a Cobra application.`,
+		Run: func(cmd *cobra.Command, args []string) {
+			yc, err := ioutil.ReadFile(openApiLocation)
+			if err != nil {
+				log.Fatalf("Error to read OpenAPI File  #%v ", err)
+			}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("openapi2backstage called")
-	},
-}
+			api := backstage.API{
+				ApiVersion: "backstage.io/v1alpha1",
+				Kind:       "API",
+				Metadata: backstage.Metadata{
+					Name:        name,
+					Description: "A mock for the service",
+				},
+				Spec: backstage.Spec{
+					Type:       apiType,
+					Lifecycle:  lifecycle,
+					Owner:      owner,
+					System:     system,
+					Definition: string(yc),
+				},
+			}
+
+			apiYaml, err := yaml.Marshal(api)
+
+			err = ioutil.WriteFile(backstageArtifact, apiYaml, 777)
+			if err != nil {
+				log.Fatalf("Error to write Backstage artifact  #%v ", err)
+			}
+		},
+	}
+	apiType           string
+	lifecycle         string
+	owner             string
+	system            string
+	name              string
+	openApiLocation   string
+	backstageArtifact string
+)
 
 func init() {
 	rootCmd.AddCommand(openapi2backstageCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// openapi2backstageCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// openapi2backstageCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// File location
+	openapi2backstageCmd.Flags().StringVar(&name, "name", "change me. I need a name", "API Name")
+	openapi2backstageCmd.Flags().StringVar(&apiType, "apiType", "/tmp/openapi.yaml", "API documentation type")
+	openapi2backstageCmd.Flags().StringVar(&lifecycle, "lifecycle", "/tmp/mock.yaml", "API current stage (development, retirement, production)")
+	openapi2backstageCmd.Flags().StringVar(&owner, "owner", "change me. I need a owner", "API team ")
+	openapi2backstageCmd.Flags().StringVar(&system, "system", "change me. I need a system", "The system name")
+	openapi2backstageCmd.Flags().StringVar(&openApiLocation, "openApiLocation", "/tmp/openapi.yaml", "OpenAPI File Location")
+	openapi2backstageCmd.Flags().StringVar(&backstageArtifact, "backstageArtifact", "/tmp/openapi.yaml", "Path to generate backstage artifact")
 }
