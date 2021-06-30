@@ -62,6 +62,15 @@ var (
 			if err != nil {
 				log.Fatalf("Error to write Backstage artifact  #%v ", err)
 			}
+
+			log.Println("==================================================")
+			log.Println("Backstage file")
+			log.Println("==================================================")
+
+			log.Println(string(apiYaml))
+
+			log.Println("Process Completed")
+
 		},
 	}
 	apiType           string
