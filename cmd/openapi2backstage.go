@@ -27,7 +27,7 @@ import (
 var (
 	openapi2backstageCmd = &cobra.Command{
 		Use:   "openapi2backstage",
-		Short: "A brief description of your command",
+		Short: "Convert the OpenAPI to Backstage API Entity",
 		Long: `A longer description that spans multiple lines and likely contains examples
 			and usage of using your command. For example:
 			
@@ -77,10 +77,10 @@ func init() {
 	rootCmd.AddCommand(openapi2backstageCmd)
 	// File location
 	openapi2backstageCmd.Flags().StringVar(&name, "name", "change me. I need a name", "API Name")
-	openapi2backstageCmd.Flags().StringVar(&apiType, "apiType", "/tmp/openapi.yaml", "API documentation type")
-	openapi2backstageCmd.Flags().StringVar(&lifecycle, "lifecycle", "/tmp/mock.yaml", "API current stage (development, retirement, production)")
+	openapi2backstageCmd.Flags().StringVar(&apiType, "api_type", "external", "API documentation type")
+	openapi2backstageCmd.Flags().StringVar(&lifecycle, "lifecycle", "development", "API current stage (development, retirement, production)")
 	openapi2backstageCmd.Flags().StringVar(&owner, "owner", "change me. I need a owner", "API team ")
 	openapi2backstageCmd.Flags().StringVar(&system, "system", "change me. I need a system", "The system name")
-	openapi2backstageCmd.Flags().StringVar(&openApiLocation, "openApiLocation", "/tmp/openapi.yaml", "OpenAPI File Location")
-	openapi2backstageCmd.Flags().StringVar(&backstageArtifact, "backstageArtifact", "/tmp/openapi.yaml", "Path to generate backstage artifact")
+	openapi2backstageCmd.Flags().StringVar(&openApiLocation, "open_api_location", "/tmp/openapi.yaml", "OpenAPI File Location")
+	openapi2backstageCmd.Flags().StringVar(&backstageArtifact, "backstage_artifact_location", "/tmp/backstage_api.yaml", "Path to generate backstage artifact")
 }
