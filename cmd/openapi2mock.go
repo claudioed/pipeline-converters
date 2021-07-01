@@ -32,7 +32,7 @@ var (
 	openapi2mockCmd = &cobra.Command{
 		Use:   "openapi2mock",
 		Short: "It will configure a mock from the OpenAPI File",
-		Long: `This commands will generate a ApiMock Custom Resource to deploy a mock in the kubernetes cluster`,
+		Long:  `This commands will generate a ApiMock Custom Resource to deploy a mock in the kubernetes cluster`,
 		Run: func(cmd *cobra.Command, args []string) {
 
 			yc, err := ioutil.ReadFile(oasLocation)
@@ -41,27 +41,27 @@ var (
 			}
 
 			mc := v1alpha1.APIMock{
-				TypeMeta:   metav1.TypeMeta{
+				TypeMeta: metav1.TypeMeta{
 					Kind:       "APIMock",
 					APIVersion: "apirator.io/v1alpha1",
 				},
 				ObjectMeta: metav1.ObjectMeta{
-					Name:                       serviceName,
-					Namespace:                  serviceNamespace,
+					Name:      serviceName,
+					Namespace: serviceNamespace,
 				},
-				Spec:       v1alpha1.APIMockSpec{
-					Definition:        string(yc),
-					ServiceDefinition: v1alpha1.ServiceDefinition{
-						Port:        servicePort,
-						ServiceType:  serviceTypeFromString(serviceType),
+				Spec: v1alpha1.APIMockSpec{
+					Definition: string(yc),
+					Service: v1alpha1.Service{
+						Port: servicePort,
+						Type: serviceTypeFromString(serviceType),
 					},
-					Watch:             false,
+					Watch: false,
 				},
 			}
 
 			apiMock, err := json.Marshal(mc)
 
-			apiYaml,err := yaml.JSONToYAML(apiMock)
+			apiYaml, err := yaml.JSONToYAML(apiMock)
 
 			err = ioutil.WriteFile(crLocation, apiYaml, 777)
 			if err != nil {
@@ -70,20 +70,20 @@ var (
 			fmt.Println("Custom Resource ApiMock was generated")
 		},
 	}
-	oasLocation string
-	crLocation string
-	serviceType string
-	servicePort int
-	serviceName string
+	oasLocation      string
+	crLocation       string
+	serviceType      string
+	servicePort      int
+	serviceName      string
 	serviceNamespace string
 )
 
 func serviceTypeFromString(st string) v1.ServiceType {
 	if st == "ClusterIP" {
 		return v1.ServiceTypeClusterIP
-	}else if st == "NodePort" {
+	} else if st == "NodePort" {
 		return v1.ServiceTypeNodePort
-	}else if st == "LoadBalancer"{
+	} else if st == "LoadBalancer" {
 		return v1.ServiceTypeLoadBalancer
 	}
 	return v1.ServiceTypeClusterIP
@@ -92,13 +92,12 @@ func serviceTypeFromString(st string) v1.ServiceType {
 func init() {
 	rootCmd.AddCommand(openapi2mockCmd)
 	// File location
-	openapi2mockCmd.Flags().StringVar(&oasLocation,"oas_location", "/tmp/openapi.yaml", "OpenAPI File")
-	openapi2mockCmd.Flags().StringVar(&crLocation,"cr_location", "/tmp/mock.yaml", "Mock File")
+	openapi2mockCmd.Flags().StringVar(&oasLocation, "oas_location", "/tmp/openapi.yaml", "OpenAPI File")
+	openapi2mockCmd.Flags().StringVar(&crLocation, "cr_location", "/tmp/mock.yaml", "Mock File")
 	// Service Definition
-	openapi2mockCmd.Flags().StringVar(&serviceType,"service_type", "ClusterIP", "Service Port Type")
-	openapi2mockCmd.Flags().IntVar(&servicePort,"service_port", 8080, "Service Port ")
+	openapi2mockCmd.Flags().StringVar(&serviceType, "service_type", "ClusterIP", "Service Port Type")
+	openapi2mockCmd.Flags().IntVar(&servicePort, "service_port", 8080, "Service Port ")
 	// k8s CR
-	openapi2mockCmd.Flags().StringVar(&serviceName,"service_name", "oas_mock", "Service Name")
-	openapi2mockCmd.Flags().StringVar(&serviceNamespace,"service_namespace", "mocks", "Mocks")
+	openapi2mockCmd.Flags().StringVar(&serviceName, "service_name", "oas_mock", "Service Name")
+	openapi2mockCmd.Flags().StringVar(&serviceNamespace, "service_namespace", "mocks", "Mocks")
 }
-
