@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"fmt"
 	"github.com/ghodss/yaml"
 	"github.com/spf13/cobra"
 	"io/ioutil"
@@ -58,7 +59,9 @@ var (
 
 			apiYaml, err := yaml.Marshal(api)
 
-			err = ioutil.WriteFile(backstageArtifact, apiYaml, 777)
+			fn := fmt.Sprintf("%s/%s.yaml", backstageArtifact, serviceName)
+
+			err = ioutil.WriteFile(fn, apiYaml, 777)
 			if err != nil {
 				log.Fatalf("Error to write Backstage artifact  #%v ", err)
 			}
@@ -86,10 +89,10 @@ func init() {
 	rootCmd.AddCommand(openapi2backstageCmd)
 	// File location
 	openapi2backstageCmd.Flags().StringVar(&name, "name", "change me. I need a name", "API Name")
-	openapi2backstageCmd.Flags().StringVar(&apiType, "api_type", "external", "API documentation type")
+	openapi2backstageCmd.Flags().StringVar(&apiType, "api-type", "external", "API documentation type")
 	openapi2backstageCmd.Flags().StringVar(&lifecycle, "lifecycle", "development", "API current stage (development, retirement, production)")
 	openapi2backstageCmd.Flags().StringVar(&owner, "owner", "change me. I need a owner", "API team ")
 	openapi2backstageCmd.Flags().StringVar(&system, "system", "change me. I need a system", "The system name")
-	openapi2backstageCmd.Flags().StringVar(&openApiLocation, "open_api_location", "/tmp/openapi.yaml", "OpenAPI File Location")
-	openapi2backstageCmd.Flags().StringVar(&backstageArtifact, "backstage_artifact_location", "/tmp/backstage_api.yaml", "Path to generate backstage artifact")
+	openapi2backstageCmd.Flags().StringVar(&openApiLocation, "oas-location", "/tmp/openapi.yaml", "OpenAPI File Location")
+	openapi2backstageCmd.Flags().StringVar(&backstageArtifact, "backstage-artifact-location", "/tmp", "Path to generate backstage artifact")
 }

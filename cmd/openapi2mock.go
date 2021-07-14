@@ -63,7 +63,9 @@ var (
 
 			apiYaml, err := yaml.JSONToYAML(apiMock)
 
-			err = ioutil.WriteFile(crLocation, apiYaml, 777)
+			fn := fmt.Sprintf("%s/%s.yaml", crLocation, serviceName)
+
+			err = ioutil.WriteFile(fn, apiYaml, 777)
 			if err != nil {
 				log.Fatalf("Error to write CR definition  #%v ", err)
 			}
@@ -92,12 +94,13 @@ func serviceTypeFromString(st string) v1.ServiceType {
 func init() {
 	rootCmd.AddCommand(openapi2mockCmd)
 	// File location
-	openapi2mockCmd.Flags().StringVar(&oasLocation, "oas_location", "/tmp/openapi.yaml", "OpenAPI File")
-	openapi2mockCmd.Flags().StringVar(&crLocation, "cr_location", "/tmp/mock.yaml", "Mock File")
+	openapi2mockCmd.Flags().StringVar(&oasLocation, "oas-location", "/tmp/openapi.yaml", "OpenAPI File")
+
+	openapi2mockCmd.Flags().StringVar(&crLocation, "cr-location", "/tmp", "Mock File")
 	// Service Definition
-	openapi2mockCmd.Flags().StringVar(&serviceType, "service_type", "ClusterIP", "Service Port Type")
-	openapi2mockCmd.Flags().IntVar(&servicePort, "service_port", 8080, "Service Port ")
+	openapi2mockCmd.Flags().StringVar(&serviceType, "service-type", "ClusterIP", "Service Port Type")
+	openapi2mockCmd.Flags().IntVar(&servicePort, "service-port", 8080, "Service Port ")
 	// k8s CR
-	openapi2mockCmd.Flags().StringVar(&serviceName, "service_name", "oas_mock", "Service Name")
-	openapi2mockCmd.Flags().StringVar(&serviceNamespace, "service_namespace", "mocks", "Mocks")
+	openapi2mockCmd.Flags().StringVar(&serviceName, "service-name", "oas_mock", "Service Name")
+	openapi2mockCmd.Flags().StringVar(&serviceNamespace, "service-namespace", "mocks", "Mocks")
 }
