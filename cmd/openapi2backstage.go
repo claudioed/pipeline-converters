@@ -59,7 +59,7 @@ var (
 
 			apiYaml, err := yaml.Marshal(api)
 
-			fn := fmt.Sprintf("%s/%s.yaml", backstageArtifact, serviceName)
+			fn := fmt.Sprintf("%s/%s.yaml", backstageArtifact, name)
 
 			err = ioutil.WriteFile(fn, apiYaml, 777)
 			if err != nil {
