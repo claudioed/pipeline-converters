@@ -81,47 +81,17 @@ var (
 			log.Println("End generation API artifact")
 			log.Println("==================================================")
 
-			log.Println("==================================================")
-			log.Println("Start generation API Catalog artifact")
-			log.Println("==================================================")
-
-			cc, err := ioutil.ReadFile(apiContextLocation)
-			if err != nil {
-				log.Fatalf("Error to read Location File  #%v ", err)
-			}
-			location := &backstage.Location{}
-
-			if err := yaml.Unmarshal(cc, location); err != nil {
-				log.Fatalf("Error to parse APIs file  #%v ", err)
-			}
-
-			location.Spec.Targets = append(location.Spec.Targets, fmt.Sprintf(fileFolder, name))
-
-			locationYaml, err := yaml.Marshal(location)
-
-			err = ioutil.WriteFile(apiContextLocation, locationYaml, 777)
-			if err != nil {
-				log.Fatalf("Error to write Backstage artifact  #%v ", err)
-			}
-
-			log.Println(string(locationYaml))
-
-			log.Println("==================================================")
-			log.Println("End generation API Catalog artifact")
-			log.Println("==================================================")
-
 			log.Println("Process Completed")
 
 		},
 	}
-	apiType            string
-	lifecycle          string
-	owner              string
-	system             string
-	name               string
-	openApiLocation    string
-	backstageArtifact  string
-	apiContextLocation string
+	apiType           string
+	lifecycle         string
+	owner             string
+	system            string
+	name              string
+	openApiLocation   string
+	backstageArtifact string
 )
 
 func init() {
@@ -134,5 +104,4 @@ func init() {
 	openapi2backstageCmd.Flags().StringVar(&system, "system", "change me. I need a system", "The system name")
 	openapi2backstageCmd.Flags().StringVar(&openApiLocation, "oas-location", "/tmp/openapi.yaml", "OpenAPI File Location")
 	openapi2backstageCmd.Flags().StringVar(&backstageArtifact, "backstage-artifact-location", "/tmp", "Path to generate backstage artifact")
-	openapi2backstageCmd.Flags().StringVar(&apiContextLocation, "api-context-location", "/tmp", "Api Context Location")
 }
