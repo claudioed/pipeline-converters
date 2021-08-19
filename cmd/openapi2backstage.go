@@ -134,5 +134,5 @@ func init() {
 	openapi2backstageCmd.Flags().StringVar(&system, "system", "change me. I need a system", "The system name")
 	openapi2backstageCmd.Flags().StringVar(&openApiLocation, "oas-location", "/tmp/openapi.yaml", "OpenAPI File Location")
 	openapi2backstageCmd.Flags().StringVar(&backstageArtifact, "backstage-artifact-location", "/tmp", "Path to generate backstage artifact")
-	openapi2backstageCmd.Flags().StringVar(&backstageArtifact, "api-context-location", "/tmp", "Api Context Location")
+	openapi2backstageCmd.Flags().StringVar(&apiContextLocation, "api-context-location", "/tmp", "Api Context Location")
 }
