@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	fileFolder = "./apis/%s.yaml"
+	fileFolder = "./%s.yaml"
 )
 
 // openapi2backstageCmd represents the openapi2backstage command
