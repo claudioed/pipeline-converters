@@ -74,6 +74,6 @@ to quickly create a Cobra application.`,
 
 func init() {
 	rootCmd.AddCommand(apitocatalogCmd)
-	openapi2backstageCmd.Flags().StringVar(&apiContextLocation, "api-context-location", "/tmp", "Api Context Location")
-	openapi2backstageCmd.Flags().StringVar(&apiName, "api-name", "dummy", "API Name")
+	apitocatalogCmd.Flags().StringVar(&apiContextLocation, "api-context-location", "/tmp", "Api Context Location")
+	apitocatalogCmd.Flags().StringVar(&apiName, "api-name", "dummy", "API Name")
 }

@@ -35,6 +35,10 @@ var (
 		Long:  `This commands will generate a ApiMock Custom Resource to deploy a mock in the kubernetes cluster`,
 		Run: func(cmd *cobra.Command, args []string) {
 
+			log.Println("==================================================")
+			log.Println("Start generation API Mock artifact")
+			log.Println("==================================================")
+
 			yc, err := ioutil.ReadFile(oasLocation)
 			if err != nil {
 				log.Fatalf("Error to read OpenAPI File  #%v ", err)
@@ -61,6 +65,8 @@ var (
 
 			apiMock, err := json.Marshal(mc)
 
+			log.Println(string(apiMock))
+
 			apiYaml, err := yaml.JSONToYAML(apiMock)
 
 			fn := fmt.Sprintf("%s/%s.yaml", crLocation, serviceName)
@@ -69,7 +75,15 @@ var (
 			if err != nil {
 				log.Fatalf("Error to write CR definition  #%v ", err)
 			}
-			fmt.Println("Custom Resource ApiMock was generated")
+
+			log.Println("==================================================")
+			log.Println("Destination: " + fn)
+			log.Println("==================================================")
+
+			log.Println("==================================================")
+			log.Println("End generation API Mock artifact")
+			log.Println("==================================================")
+
 		},
 	}
 	oasLocation      string
